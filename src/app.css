@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--brand-orange: #ea7a43;
+		--brand-teal: #4db0a2;
+		--brand-dark: #18282d;
+		--brand-light-green: #a6c8b5;
+		--brand-cyan: #25d0ab;
+		--brand-green: #98e594;
+	}
+
+	html {
+		scroll-behavior: smooth;
+	}
+
+	body {
+		@apply bg-brand-dark text-white font-sans antialiased;
+	}
+}
+
+@layer components {
+	/* Glass card effect used throughout the site */
+	.glass-card {
+		@apply bg-white/5 backdrop-blur-[10px] border-2 border-brand-teal/40 rounded-lg;
+	}
+
+	/* Glassmorphic card variant (used on about/contact pages) */
+	.glassmorphic-card {
+		@apply bg-white/5 backdrop-blur-[10px] border border-white/10 rounded-3xl;
+		box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+	}
+
+	/* Glass input for forms */
+	.glass-input {
+		@apply bg-white/10 border border-white/20 rounded-xl text-white px-4 py-3;
+		@apply transition-all duration-200 ease-in-out;
+		@apply focus:outline-none focus:border-brand-orange focus:ring-2 focus:ring-brand-orange/40;
+		@apply focus:bg-white/15;
+	}
+
+	.glass-input::placeholder {
+		@apply text-white/70;
+	}
+
+	/* Cyan underline accent */
+	.cyan-underline {
+		@apply relative pb-2;
+	}
+
+	.cyan-underline::after {
+		content: '';
+		@apply absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-[3px] bg-brand-cyan rounded;
+		filter: drop-shadow(0 0 5px var(--brand-cyan));
+	}
+
+	/* Gradient button */
+	.gradient-button {
+		@apply bg-gradient-to-r from-amber-500 to-amber-400 px-8 py-3 rounded-full;
+		@apply font-semibold text-slate-900 transition-all duration-300;
+		@apply hover:-translate-y-0.5;
+	}
+
+	/* Active nav link */
+	.nav-link-active {
+		@apply relative text-brand-orange pb-1;
+	}
+
+	.nav-link-active::after {
+		content: '';
+		@apply absolute left-0 bottom-0 w-full h-[2px] bg-brand-orange;
+	}
+}
+
+@layer utilities {
+	/* Custom text shadow for glowing text */
+	.text-glow {
+		text-shadow: 0 0 10px currentColor;
+	}
+}
+
