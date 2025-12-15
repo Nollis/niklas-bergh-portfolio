@@ -7,16 +7,23 @@
 
 	let formStatus = $state<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
+	const inquiries = [
+		'Product demos or technical storytelling',
+		'Prototyping and design/development audits',
+		'AI or automation ideas for illustration and data workflows',
+		'Collaboration on visuals, docs, or real-time dashboards'
+	];
+
 	const socialContacts = [
-		{ icon: Mail, label: 'Email', value: 'hello@n3.com', href: 'mailto:hello@n3.com' },
+		{ icon: Mail, label: 'Email', value: 'hello@niklasbergh.com', href: 'mailto:hello@niklasbergh.com' },
 		{ icon: Instagram, label: 'Instagram', value: '@hellon3', href: 'https://instagram.com/hellon3' },
 		{ icon: Youtube, label: 'YouTube', value: '@hellon3', href: 'https://youtube.com/@hellon3' }
 	];
 </script>
 
 <svelte:head>
-	<title>Contact - Niklas Bergh</title>
-	<meta name="description" content="Get in touch with Niklas Bergh for collaboration, projects, or inquiries." />
+	<title>Contact Niklas Bergh | Full Stack Developer & Technical Illustrator</title>
+	<meta name="description" content="Get in touch with Niklas Bergh—full stack developer, technical illustrator, and AI/3D creator—to discuss projects, collaborations, or technical storytelling needs." />
 	<!-- Custom background for contact page -->
 	<style>
 		.layout-bg, .layout-overlay { display: none !important; }
@@ -35,10 +42,36 @@
 
 <div class="flex flex-col lg:flex-row lg:items-start lg:justify-center gap-8">
 	<!-- Contact Form Section -->
-	<section class="w-full max-w-3xl">
-		<h1 class="text-5xl sm:text-6xl font-bold text-white mb-8">Contact</h1>
+	<section class="w-full max-w-3xl space-y-4">
+		<h1 class="text-5xl sm:text-6xl font-bold text-white">Contact</h1>
+		<p class="text-slate-300 text-lg max-w-2xl">
+			Let's talk about your next build, visual story, or product challenge. Share a bit of context and I will reply within one to two business days.
+		</p>
 
-		<GlassCard variant="rounded" class="p-8">
+		<GlassCard variant="rounded" class="p-8 space-y-8">
+			<div class="grid md:grid-cols-2 gap-6">
+				<div>
+					<h2 class="text-xl font-semibold text-white mb-2">Inquiries welcome</h2>
+					<ul class="space-y-2 text-slate-300 text-sm">
+						{#each inquiries as inquiry}
+							<li class="flex gap-2">
+								<span class="text-brand-cyan">•</span>
+								<span>{inquiry}</span>
+							</li>
+						{/each}
+					</ul>
+				</div>
+				<div>
+					<h2 class="text-xl font-semibold text-white mb-2">What to include</h2>
+					<ul class="space-y-2 text-slate-300 text-sm">
+						<li class="flex gap-2"><span class="text-brand-cyan">•</span><span>Goals and timeline</span></li>
+						<li class="flex gap-2"><span class="text-brand-cyan">•</span><span>Links to briefs, repos, or references</span></li>
+						<li class="flex gap-2"><span class="text-brand-cyan">•</span><span>Decision makers and stakeholders</span></li>
+						<li class="flex gap-2"><span class="text-brand-cyan">•</span><span>Success criteria and constraints</span></li>
+					</ul>
+				</div>
+			</div>
+
 			<form
 				method="POST"
 				use:enhance={() => {
@@ -86,7 +119,7 @@
 							type="text"
 							id="subject"
 							name="subject"
-							placeholder="Subject"
+							placeholder="Project or inquiry"
 							class="w-full glass-input"
 						/>
 					</div>
@@ -97,7 +130,7 @@
 						<textarea
 							id="message"
 							name="message"
-							placeholder="Message"
+							placeholder="Share context, goals, timeline, and any links"
 							rows="5"
 							required
 							class="w-full glass-input resize-none"
@@ -118,19 +151,23 @@
 								Sending...
 							{:else}
 								<Send class="w-4 h-4 mr-2" />
-								Send Message
+								Send message
 							{/if}
 						</Button>
+						<p class="text-slate-400 text-sm">Prefer email? Reach out directly via the links on the right.</p>
 					</div>
 				</div>
 			</form>
+
+			<p class="text-slate-200 font-medium">Let's build something together.</p>
 		</GlassCard>
 	</section>
 
 	<!-- Social Info Section -->
-	<aside class="w-full lg:w-auto lg:pl-8 flex justify-center lg:justify-start lg:pt-28">
-		<GlassCard variant="rounded" class="p-6 w-full max-w-xs">
-			<ul class="space-y-4 text-sm">
+	<aside class="w-full lg:w-auto lg:pl-8 flex justify-center lg:justify-start lg:pt-24">
+		<GlassCard variant="rounded" class="p-6 w-full max-w-xs space-y-4">
+			<h2 class="text-lg font-semibold text-white">Alternative contact</h2>
+			<ul class="space-y-3 text-sm">
 				{#each socialContacts as contact}
 					<li>
 						<a
@@ -148,4 +185,3 @@
 		</GlassCard>
 	</aside>
 </div>
-

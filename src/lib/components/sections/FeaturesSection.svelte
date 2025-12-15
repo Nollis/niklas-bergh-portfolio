@@ -5,20 +5,20 @@
 		{
 			label: 'Hybrid Maker',
 			title: 'Technical Creator',
-			tagline: 'Bridging deep technical illustration, modern web development, and AI tooling.',
-			description: 'I blend hands-on craftsmanship with next-gen digital workflows to turn complex ideas into intuitive visuals, apps, and systems.'
+			tagline: 'Bridging design, code, and AI for clarity.',
+			description: 'I blend hands-on illustration with engineering and AI tooling to turn complex ideas into intuitive visuals, apps, and systems.'
 		},
 		{
 			label: 'Systems Thinker',
 			title: 'Fullstack + Workflow Engineer',
-			tagline: 'I design end-to-end systems that actually work together.',
-			description: 'From 3D pipelines and AI pose estimation to custom apps and WordPress rebuilds, I connect the dots and build solutions that hold up in the real world.'
+			tagline: 'Designing end-to-end systems that connect teams.',
+			description: 'From data models and real-time layers to production-ready UI, I build flows that hold up under real constraints.'
 		},
 		{
 			label: 'Experiment-Forward',
 			title: 'Rapid Prototyper',
-			tagline: 'I move fast, test early, and iterate relentlessly.',
-			description: 'Exploring new tech—AI models, 3D rigs, data pipelines, UX patterns—is part of the creative process. Everything is an experiment until it becomes a tool.'
+			tagline: 'Test early and ship with confidence.',
+			description: 'New tech, 3D rigs, data pipelines, and UX patterns are prototyped fast, validated with metrics, and hardened for launch.'
 		}
 	];
 </script>
@@ -35,4 +35,3 @@
 		{/each}
 	</div>
 </section>
-

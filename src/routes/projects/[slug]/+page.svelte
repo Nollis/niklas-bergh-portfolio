@@ -1,8 +1,7 @@
 <script lang="ts">
 	import GlassCard from '$lib/components/ui/GlassCard.svelte';
-	import Button from '$lib/components/ui/Button.svelte';
 	import BokehParticles from '$lib/components/effects/BokehParticles.svelte';
-	import { ArrowLeft, ArrowRight, ExternalLink, Calendar, User, Briefcase, Package } from 'lucide-svelte';
+	import { ArrowLeft, ArrowRight, ExternalLink, Calendar, User, Briefcase, Package, CheckCircle } from 'lucide-svelte';
 
 	let { data } = $props();
 	const project = $derived(data.project);
@@ -22,6 +21,9 @@
 		'in-progress': 'bg-brand-orange',
 		planned: 'bg-brand-light-green'
 	};
+
+	const problem = $derived(project.problem ?? project.challenge);
+	const hasResults = $derived(Array.isArray(project.results) && project.results.length > 0);
 </script>
 
 <svelte:head>
@@ -54,7 +56,7 @@
 	</a>
 
 	<!-- Hero Section -->
-	<header class="mb-16">
+	<header class="mb-16 space-y-8">
 		<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-end">
 			<!-- Left: Title & Description -->
 			<div class="lg:col-span-7 space-y-6">
@@ -157,7 +159,7 @@
 			</div>
 		{:else}
 			<div class="mt-12 rounded-2xl overflow-hidden aspect-[21/9] w-full border border-white/10 bg-gradient-to-br from-brand-dark to-brand-teal/20 flex items-center justify-center">
-				<span class="text-6xl opacity-20">🎨</span>
+				<span class="text-2xl text-white/40">Project visual coming soon</span>
 			</div>
 		{/if}
 	</header>
@@ -169,14 +171,34 @@
 			<div class="sticky top-32 space-y-6">
 				<!-- Table of Contents -->
 				<nav class="space-y-1 border-l border-white/20 ml-2">
-					{#if project.challenge || project.solution}
-						<a href="#challenge" class="block pl-4 py-2 text-sm text-slate-400 hover:text-brand-cyan transition-colors border-l-2 border-transparent hover:border-brand-cyan -ml-[1px]">
-							Challenge & Solution
+					{#if project.overview}
+						<a href="#overview" class="block pl-4 py-2 text-sm text-slate-400 hover:text-brand-cyan transition-colors border-l-2 border-transparent hover:border-brand-cyan -ml-[1px]">
+							Overview
+						</a>
+					{/if}
+					{#if problem}
+						<a href="#problem" class="block pl-4 py-2 text-sm text-slate-400 hover:text-brand-cyan transition-colors border-l-2 border-transparent hover:border-brand-cyan -ml-[1px]">
+							Problem
+						</a>
+					{/if}
+					{#if project.solution}
+						<a href="#solution" class="block pl-4 py-2 text-sm text-slate-400 hover:text-brand-cyan transition-colors border-l-2 border-transparent hover:border-brand-cyan -ml-[1px]">
+							Solution
+						</a>
+					{/if}
+					{#if hasResults}
+						<a href="#results" class="block pl-4 py-2 text-sm text-slate-400 hover:text-brand-cyan transition-colors border-l-2 border-transparent hover:border-brand-cyan -ml-[1px]">
+							Results
 						</a>
 					{/if}
 					{#if project.description}
 						<a href="#details" class="block pl-4 py-2 text-sm text-slate-400 hover:text-brand-cyan transition-colors border-l-2 border-transparent hover:border-brand-cyan -ml-[1px]">
 							Project Details
+						</a>
+					{/if}
+					{#if project.galleryCaptions?.length}
+						<a href="#gallery" class="block pl-4 py-2 text-sm text-slate-400 hover:text-brand-cyan transition-colors border-l-2 border-transparent hover:border-brand-cyan -ml-[1px]">
+							Gallery Notes
 						</a>
 					{/if}
 					<a href="#tech" class="block pl-4 py-2 text-sm text-slate-400 hover:text-brand-cyan transition-colors border-l-2 border-transparent hover:border-brand-cyan -ml-[1px]">
@@ -193,40 +215,70 @@
 		</aside>
 
 		<!-- Content Area -->
-		<div class="lg:col-span-9 space-y-16">
-			<!-- Challenge & Solution -->
-			{#if project.challenge || project.solution}
-				<section id="challenge">
+		<div class="lg:col-span-9 space-y-14">
+			{#if project.overview}
+				<section id="overview">
 					<GlassCard variant="rounded" class="p-8 md:p-10">
-						<h2 class="text-2xl md:text-3xl font-bold text-white mb-6 flex items-center gap-3">
-							<span class="text-brand-cyan">⚡</span>
-							Challenge & Solution
-						</h2>
-						
-						<div class="space-y-6 text-slate-300 leading-relaxed">
-							{#if project.challenge}
-								<p>{project.challenge}</p>
-								
-								<blockquote class="my-8 pl-6 border-l-4 border-brand-cyan/30 italic text-xl text-white/80">
-									"How might we transform complexity into clarity?"
-								</blockquote>
-							{/if}
-							
-							{#if project.solution}
-								<p>{project.solution}</p>
-							{/if}
-						</div>
+						<h2 class="text-2xl md:text-3xl font-bold text-white mb-4">Overview</h2>
+						<p class="text-slate-300 leading-relaxed text-lg">{project.overview}</p>
 					</GlassCard>
 				</section>
 			{/if}
 
-			<!-- Project Details -->
+			{#if problem}
+				<section id="problem">
+					<GlassCard variant="rounded" class="p-8 md:p-10 space-y-4">
+						<h2 class="text-2xl md:text-3xl font-bold text-white">Problem</h2>
+						<p class="text-slate-300 leading-relaxed">{problem}</p>
+					</GlassCard>
+				</section>
+			{/if}
+
+			{#if project.solution}
+				<section id="solution">
+					<GlassCard variant="rounded" class="p-8 md:p-10 space-y-4">
+						<h2 class="text-2xl md:text-3xl font-bold text-white">My Solution</h2>
+						<p class="text-slate-300 leading-relaxed">{project.solution}</p>
+					</GlassCard>
+				</section>
+			{/if}
+
+			{#if hasResults}
+				<section id="results">
+					<GlassCard variant="rounded" class="p-8 md:p-10 space-y-4">
+						<h2 class="text-2xl md:text-3xl font-bold text-white">Results</h2>
+						<ul class="space-y-2 text-slate-200">
+							{#each project.results as result}
+								<li class="flex gap-3 items-start">
+									<CheckCircle class="w-4 h-4 text-brand-cyan mt-0.5" />
+									<span class="leading-relaxed">{result}</span>
+								</li>
+							{/each}
+						</ul>
+					</GlassCard>
+				</section>
+			{/if}
+
 			{#if project.description}
 				<section id="details">
-					<h3 class="text-2xl font-bold text-white mb-6">Project Details</h3>
+					<h3 class="text-2xl font-bold text-white mb-3">Project Details</h3>
 					<p class="text-slate-300 leading-relaxed text-lg">
 						{project.description}
 					</p>
+				</section>
+			{/if}
+
+			{#if project.galleryCaptions?.length}
+				<section id="gallery">
+					<h3 class="text-2xl font-bold text-white mb-4">Gallery / Visual Notes</h3>
+					<ul class="space-y-3 text-slate-300 text-base leading-relaxed">
+						{#each project.galleryCaptions as caption}
+							<li class="flex gap-2">
+								<span class="text-brand-cyan">*</span>
+								<span>{caption}</span>
+							</li>
+						{/each}
+					</ul>
 				</section>
 			{/if}
 
@@ -237,7 +289,7 @@
 					{#each project.tech as tech}
 						<GlassCard variant="rounded" class="p-4 text-center hover:border-brand-cyan/40 transition-colors group">
 							<div class="w-10 h-10 rounded-lg bg-brand-cyan/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-brand-cyan/20 transition-colors">
-								<span class="text-brand-cyan text-lg">⚙️</span>
+								<span class="text-brand-cyan text-lg">*</span>
 							</div>
 							<p class="text-white font-medium text-sm">{tech}</p>
 						</GlassCard>
@@ -282,6 +334,3 @@
 		</div>
 	</div>
 </article>
-
-
-

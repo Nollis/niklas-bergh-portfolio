@@ -6,8 +6,8 @@
 </script>
 
 <svelte:head>
-	<title>Niklas Bergh - Portfolio</title>
-	<meta name="description" content="Technical Illustrator, Full-Stack Developer, AI & 3D Creator" />
+	<title>Niklas Bergh | Full Stack Developer, Technical Illustrator, AI/3D Portfolio</title>
+	<meta name="description" content="Portfolio of Niklas Bergh - full stack developer and technical illustrator blending code, design, and AI/3D to communicate complex systems and launch polished products." />
 </svelte:head>
 
 <!-- Page-specific animation -->
@@ -16,4 +16,3 @@
 <Hero />
 <FeaturesSection />
 <ProjectsSection title="Featured Projects" />
-
