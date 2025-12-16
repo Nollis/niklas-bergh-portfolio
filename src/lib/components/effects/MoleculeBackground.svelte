@@ -41,12 +41,45 @@
 		directional.position.set(5, 10, 7);
 		scene.add(directional);
 
-		// Cartoon outline look in the brand green
+		// Helpers for a simple cartoon outline look in brand green
+		const brandGreen = 0x98e594;
 		const lineMaterial = new THREE.LineBasicMaterial({
-			color: 0x98e594, // brand-green
+			color: brandGreen,
 			transparent: true,
-			opacity: 0.8
+			opacity: 0.85
 		});
+
+		function createAtomTexture() {
+			const size = 128;
+			const c = document.createElement('canvas');
+			c.width = c.height = size;
+			const ctx = c.getContext('2d');
+			if (!ctx) return null;
+
+			ctx.clearRect(0, 0, size, size);
+			ctx.strokeStyle = '#98e594';
+			ctx.lineWidth = 6;
+			ctx.shadowColor = 'rgba(152, 229, 148, 0.35)';
+			ctx.shadowBlur = 8;
+			ctx.beginPath();
+			ctx.arc(size / 2, size / 2, size / 2 - 10, 0, Math.PI * 2);
+			ctx.stroke();
+
+			const tex = new THREE.CanvasTexture(c);
+			tex.needsUpdate = true;
+			return tex;
+		}
+
+		const atomTexture = createAtomTexture();
+		const atomMaterial = atomTexture
+			? new THREE.SpriteMaterial({
+					map: atomTexture,
+					color: brandGreen,
+					transparent: true,
+					opacity: 0.9,
+					depthWrite: false
+				})
+			: null;
 
 		type MoleculeGroup = THREE.Group & {
 			userData: {
@@ -60,15 +93,11 @@
 		function createMolecule() {
 			const group = new THREE.Group() as MoleculeGroup;
 
-			const atomGeo = new THREE.SphereGeometry(0.4, 16, 16);
-			const bondGeo = new THREE.CylinderGeometry(0.1, 0.1, 1.5, 8);
-			const atomEdges = new THREE.EdgesGeometry(atomGeo);
-			const bondEdges = new THREE.EdgesGeometry(bondGeo);
-
-			// Simple "molecule": 3 atoms, 2 bonds
-			const atoms: THREE.LineSegments[] = [];
+			// Simple "molecule": 3 flat atoms with connecting lines
+			const atoms: THREE.Sprite[] = [];
 			for (let i = 0; i < 3; i++) {
-				const atom = new THREE.LineSegments(atomEdges, lineMaterial);
+				const atom = new THREE.Sprite(atomMaterial ?? undefined);
+				atom.scale.set(1.1, 1.1, 1.1);
 				atom.position.set(
 					(Math.random() - 0.5) * 2,
 					(Math.random() - 0.5) * 2,
@@ -79,16 +108,10 @@
 			}
 
 			// Connect atoms with bonds
-			function makeBond(a: THREE.LineSegments, b: THREE.LineSegments) {
-				const bond = new THREE.LineSegments(bondEdges, lineMaterial);
-				const mid = new THREE.Vector3().addVectors(a.position, b.position).multiplyScalar(0.5);
-				bond.position.copy(mid);
-
-				// Orient cylinder from a to b
-				const dir = new THREE.Vector3().subVectors(b.position, a.position);
-				const len = dir.length();
-				bond.scale.set(1, len / 1.5, 1);
-				bond.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+			function makeBond(a: THREE.Sprite, b: THREE.Sprite) {
+				const points = [a.position.clone(), b.position.clone()];
+				const bondGeo = new THREE.BufferGeometry().setFromPoints(points);
+				const bond = new THREE.Line(bondGeo, lineMaterial);
 				group.add(bond);
 			}
 
