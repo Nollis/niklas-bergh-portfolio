@@ -41,12 +41,11 @@
 		directional.position.set(5, 10, 7);
 		scene.add(directional);
 
-		// Outlined look in the brand green
-		const outlineMaterial = new THREE.MeshBasicMaterial({
+		// Cartoon outline look in the brand green
+		const lineMaterial = new THREE.LineBasicMaterial({
 			color: 0x98e594, // brand-green
-			wireframe: true,
 			transparent: true,
-			opacity: 0.7
+			opacity: 0.8
 		});
 
 		type MoleculeGroup = THREE.Group & {
@@ -63,11 +62,13 @@
 
 			const atomGeo = new THREE.SphereGeometry(0.4, 16, 16);
 			const bondGeo = new THREE.CylinderGeometry(0.1, 0.1, 1.5, 8);
+			const atomEdges = new THREE.EdgesGeometry(atomGeo);
+			const bondEdges = new THREE.EdgesGeometry(bondGeo);
 
 			// Simple "molecule": 3 atoms, 2 bonds
-			const atoms: THREE.Mesh[] = [];
+			const atoms: THREE.LineSegments[] = [];
 			for (let i = 0; i < 3; i++) {
-				const atom = new THREE.Mesh(atomGeo, outlineMaterial);
+				const atom = new THREE.LineSegments(atomEdges, lineMaterial);
 				atom.position.set(
 					(Math.random() - 0.5) * 2,
 					(Math.random() - 0.5) * 2,
@@ -78,8 +79,8 @@
 			}
 
 			// Connect atoms with bonds
-			function makeBond(a: THREE.Mesh, b: THREE.Mesh) {
-				const bond = new THREE.Mesh(bondGeo, outlineMaterial);
+			function makeBond(a: THREE.LineSegments, b: THREE.LineSegments) {
+				const bond = new THREE.LineSegments(bondEdges, lineMaterial);
 				const mid = new THREE.Vector3().addVectors(a.position, b.position).multiplyScalar(0.5);
 				bond.position.copy(mid);
 
