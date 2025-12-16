@@ -33,7 +33,7 @@
 	<style>
 		.layout-bg, .layout-overlay { display: none !important; }
 		body {
-			background-image: url('/bg2.png') !important;
+			background-image: url('/bg2.avif') !important;
 			background-size: cover !important;
 			background-position: center !important;
 			background-repeat: no-repeat !important;
