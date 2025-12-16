@@ -41,45 +41,24 @@
 		directional.position.set(5, 10, 7);
 		scene.add(directional);
 
-		// Helpers for a simple cartoon outline look in brand green
+		// Materials for a simple 3D toon look
 		const brandGreen = 0x98e594;
-		const lineMaterial = new THREE.LineBasicMaterial({
+		const brandTeal = 0x4db0a2;
+		const coreMaterial = new THREE.MeshToonMaterial({
 			color: brandGreen,
-			transparent: true,
-			opacity: 0.85
+			emissive: brandGreen,
+			emissiveIntensity: 0.25
 		});
-
-		function createAtomTexture() {
-			const size = 128;
-			const c = document.createElement('canvas');
-			c.width = c.height = size;
-			const ctx = c.getContext('2d');
-			if (!ctx) return null;
-
-			ctx.clearRect(0, 0, size, size);
-			ctx.strokeStyle = '#98e594';
-			ctx.lineWidth = 6;
-			ctx.shadowColor = 'rgba(152, 229, 148, 0.35)';
-			ctx.shadowBlur = 8;
-			ctx.beginPath();
-			ctx.arc(size / 2, size / 2, size / 2 - 10, 0, Math.PI * 2);
-			ctx.stroke();
-
-			const tex = new THREE.CanvasTexture(c);
-			tex.needsUpdate = true;
-			return tex;
-		}
-
-		const atomTexture = createAtomTexture();
-		const atomMaterial = atomTexture
-			? new THREE.SpriteMaterial({
-					map: atomTexture,
-					color: brandGreen,
-					transparent: true,
-					opacity: 0.9,
-					depthWrite: false
-				})
-			: null;
+		const smallAtomMaterial = new THREE.MeshToonMaterial({
+			color: brandTeal,
+			emissive: brandTeal,
+			emissiveIntensity: 0.3
+		});
+		const bondMaterial = new THREE.MeshToonMaterial({
+			color: brandGreen,
+			emissive: brandGreen,
+			emissiveIntensity: 0.15
+		});
 
 		type MoleculeGroup = THREE.Group & {
 			userData: {
@@ -93,30 +72,54 @@
 		function createMolecule() {
 			const group = new THREE.Group() as MoleculeGroup;
 
-			// Simple "molecule": 3 flat atoms with connecting lines
-			const atoms: THREE.Sprite[] = [];
-			for (let i = 0; i < 3; i++) {
-				const atom = new THREE.Sprite(atomMaterial ?? undefined);
-				atom.scale.set(1.1, 1.1, 1.1);
-				atom.position.set(
-					(Math.random() - 0.5) * 2,
-					(Math.random() - 0.5) * 2,
-					(Math.random() - 0.5) * 2
-				);
-				group.add(atom);
-				atoms.push(atom);
+			// Geometry shared across molecules
+			const coreGeo = new THREE.SphereGeometry(0.7, 28, 28);
+			const smallGeo = new THREE.SphereGeometry(0.45, 22, 22);
+			const bondGeo = new THREE.CylinderGeometry(0.12, 0.12, 1, 16);
+
+			// CO2-style layout: 1 larger core, 2 smaller ends (linear or bent variant)
+			const core = new THREE.Mesh(coreGeo, coreMaterial);
+			core.position.set(0, 0, 0);
+			group.add(core);
+
+			const atoms: THREE.Mesh[] = [];
+			const variant = Math.random() > 0.5 ? 'linear' : 'bent';
+			const offset = 1.6 + Math.random() * 0.5;
+			const bend = THREE.MathUtils.degToRad(30 + Math.random() * 20);
+
+			const left = new THREE.Mesh(smallGeo, smallAtomMaterial);
+			const right = new THREE.Mesh(smallGeo, smallAtomMaterial);
+
+			if (variant === 'linear') {
+				left.position.set(-offset, 0, 0.1 * (Math.random() - 0.5));
+				right.position.set(offset, 0, -0.1 * (Math.random() - 0.5));
+			} else {
+				const dist = 1.2 + Math.random() * 0.4;
+				left.position.set(-Math.cos(bend) * dist, Math.sin(bend) * dist, 0.12);
+				right.position.set(Math.cos(bend) * dist, Math.sin(bend) * dist, -0.12);
 			}
+
+			atoms.push(left, right);
+			group.add(left);
+			group.add(right);
 
 			// Connect atoms with bonds
-			function makeBond(a: THREE.Sprite, b: THREE.Sprite) {
-				const points = [a.position.clone(), b.position.clone()];
-				const bondGeo = new THREE.BufferGeometry().setFromPoints(points);
-				const bond = new THREE.Line(bondGeo, lineMaterial);
+			function makeBond(a: THREE.Mesh, b: THREE.Mesh) {
+				const bond = new THREE.Mesh(bondGeo, bondMaterial);
 				group.add(bond);
+
+				const mid = new THREE.Vector3().addVectors(a.position, b.position).multiplyScalar(0.5);
+				bond.position.copy(mid);
+
+				const dir = new THREE.Vector3().subVectors(b.position, a.position);
+				const len = dir.length();
+				const visualLen = Math.max(len - 0.9, 0.35);
+				bond.scale.set(1, visualLen, 1);
+				bond.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
 			}
 
-			makeBond(atoms[0], atoms[1]);
-			makeBond(atoms[1], atoms[2]);
+			makeBond(core, left);
+			makeBond(core, right);
 
 			group.position.set(
 				(Math.random() - 0.5) * 25,
