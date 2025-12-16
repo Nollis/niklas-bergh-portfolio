@@ -41,16 +41,12 @@
 		directional.position.set(5, 10, 7);
 		scene.add(directional);
 
-		// Materials (nature/teal palette)
-		const atomMaterial = new THREE.MeshStandardMaterial({
-			color: 0x5eead4, // teal
-			metalness: 0.1,
-			roughness: 0.3
-		});
-		const bondMaterial = new THREE.MeshStandardMaterial({
-			color: 0x22c55e, // green
-			metalness: 0.2,
-			roughness: 0.4
+		// Outlined look in the brand green
+		const outlineMaterial = new THREE.MeshBasicMaterial({
+			color: 0x98e594, // brand-green
+			wireframe: true,
+			transparent: true,
+			opacity: 0.7
 		});
 
 		type MoleculeGroup = THREE.Group & {
@@ -71,7 +67,7 @@
 			// Simple "molecule": 3 atoms, 2 bonds
 			const atoms: THREE.Mesh[] = [];
 			for (let i = 0; i < 3; i++) {
-				const atom = new THREE.Mesh(atomGeo, atomMaterial);
+				const atom = new THREE.Mesh(atomGeo, outlineMaterial);
 				atom.position.set(
 					(Math.random() - 0.5) * 2,
 					(Math.random() - 0.5) * 2,
@@ -83,7 +79,7 @@
 
 			// Connect atoms with bonds
 			function makeBond(a: THREE.Mesh, b: THREE.Mesh) {
-				const bond = new THREE.Mesh(bondGeo, bondMaterial);
+				const bond = new THREE.Mesh(bondGeo, outlineMaterial);
 				const mid = new THREE.Vector3().addVectors(a.position, b.position).multiplyScalar(0.5);
 				bond.position.copy(mid);
 
