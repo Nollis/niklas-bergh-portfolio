@@ -1,4 +1,4 @@
-<script lang="ts">
+ï»¿<script lang="ts">
 	import { enhance } from '$app/forms';
 	import GlassCard from '$lib/components/ui/GlassCard.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
@@ -23,7 +23,7 @@
 
 <svelte:head>
 	<title>Contact Niklas Bergh | Full Stack Developer & Technical Illustrator</title>
-	<meta name="description" content="Get in touch with Niklas Bergh—full stack developer, technical illustrator, and AI/3D creator—to discuss projects, collaborations, or technical storytelling needs." />
+	<meta name="description" content="Get in touch with Niklas Bergh - full stack developer, technical illustrator, and AI/3D creator - to discuss projects, collaborations, or technical storytelling needs." />
 	<!-- Custom background for contact page -->
 	<style>
 		.layout-bg, .layout-overlay { display: none !important; }
@@ -55,7 +55,7 @@
 					<ul class="space-y-2 text-slate-300 text-sm">
 						{#each inquiries as inquiry}
 							<li class="flex gap-2">
-								<span class="text-brand-cyan">•</span>
+								<span class="text-brand-cyan">-</span>
 								<span>{inquiry}</span>
 							</li>
 						{/each}
@@ -64,10 +64,10 @@
 				<div>
 					<h2 class="text-xl font-semibold text-white mb-2">What to include</h2>
 					<ul class="space-y-2 text-slate-300 text-sm">
-						<li class="flex gap-2"><span class="text-brand-cyan">•</span><span>Goals and timeline</span></li>
-						<li class="flex gap-2"><span class="text-brand-cyan">•</span><span>Links to briefs, repos, or references</span></li>
-						<li class="flex gap-2"><span class="text-brand-cyan">•</span><span>Decision makers and stakeholders</span></li>
-						<li class="flex gap-2"><span class="text-brand-cyan">•</span><span>Success criteria and constraints</span></li>
+						<li class="flex gap-2"><span class="text-brand-cyan">-</span><span>Goals and timeline</span></li>
+						<li class="flex gap-2"><span class="text-brand-cyan">-</span><span>Links to briefs, repos, or references</span></li>
+						<li class="flex gap-2"><span class="text-brand-cyan">-</span><span>Decision makers and stakeholders</span></li>
+						<li class="flex gap-2"><span class="text-brand-cyan">-</span><span>Success criteria and constraints</span></li>
 					</ul>
 				</div>
 			</div>
@@ -185,3 +185,7 @@
 		</GlassCard>
 	</aside>
 </div>
+
+
+
+

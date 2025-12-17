@@ -1,4 +1,4 @@
-<script lang="ts">
+﻿<script lang="ts">
 	import { navigation, socialLinks } from '$lib/config/theme';
 	import { Mail, Instagram, Youtube } from 'lucide-svelte';
 
@@ -53,7 +53,10 @@
 
 	<!-- Copyright -->
 	<p class="text-center text-slate-500 text-xs mt-6">
-		© {new Date().getFullYear()} Niklas Bergh. All rights reserved.
+		&copy; {new Date().getFullYear()} Niklas Bergh. All rights reserved.
 	</p>
 </footer>
+
+
+
 

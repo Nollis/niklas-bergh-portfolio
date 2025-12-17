@@ -1,4 +1,4 @@
-<script lang="ts">
+ï»¿<script lang="ts">
 	import GlassCard from '$lib/components/ui/GlassCard.svelte';
 	import Button from '$lib/components/ui/Button.svelte';
 	import CircuitBackground from '$lib/components/effects/CircuitBackground.svelte';
@@ -96,7 +96,7 @@
 					<h3 class="text-xl font-semibold text-white mb-2">Highlights</h3>
 					<ul class="space-y-2 text-slate-300">
 						{#each highlights as item}
-							<li>• {item}</li>
+							<li>- {item}</li>
 						{/each}
 					</ul>
 				</div>
@@ -150,7 +150,7 @@
 			<ul class="space-y-3 text-slate-300 text-sm leading-relaxed">
 				{#each galleryCaptions as caption}
 					<li class="flex gap-2">
-						<span class="text-brand-cyan">•</span>
+						<span class="text-brand-cyan">-</span>
 						<span>{caption}</span>
 					</li>
 				{/each}
@@ -169,3 +169,5 @@
 		</div>
 	</GlassCard>
 </section>
+
+

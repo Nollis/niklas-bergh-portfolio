@@ -1,4 +1,4 @@
-import { fail } from '@sveltejs/kit';
+﻿import { fail } from '@sveltejs/kit';
 import { z } from 'zod';
 import type { Actions } from './$types';
 
@@ -30,7 +30,7 @@ export const actions: Actions = {
 		}
 
 		// Log to server console (placeholder for email/API integration)
-		console.log('📧 Contact form submission:', {
+		console.log('Contact form submission:', {
 			name: result.data.name,
 			email: result.data.email,
 			subject: result.data.subject || '(no subject)',

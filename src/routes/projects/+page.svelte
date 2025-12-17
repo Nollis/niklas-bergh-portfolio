@@ -6,7 +6,10 @@
 
 <svelte:head>
 	<title>Projects | Niklas Bergh - Full Stack Developer & AI/3D Technical Illustrator</title>
-	<meta name="description" content="Explore case studies from Niklas Bergh’s portfolio: AI-driven illustration automation, real-time dashboards, and decision apps built with modern full stack engineering." />
+	<meta
+		name="description"
+		content="Explore case studies from Niklas Bergh's portfolio: AI-driven illustration automation, real-time dashboards, and decision apps built with modern full stack engineering."
+	/>
 	<!-- Custom background for projects page -->
 	<style>
 		.layout-bg, .layout-overlay { display: none !important; }
@@ -32,3 +35,4 @@
 		{/each}
 	</div>
 </section>
+
