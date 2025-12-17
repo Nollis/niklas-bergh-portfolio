@@ -230,7 +230,7 @@
 		width: 140%;
 		height: 140%;
 		pointer-events: none;
-		z-index: 1;
+		z-index: -2; /* sit behind page content */
 		opacity: 0.6;
 		transform: translate(-50%, -50%) rotate(-20deg);
 		transform-origin: center center;
