@@ -73,9 +73,9 @@
 			const group = new THREE.Group() as MoleculeGroup;
 
 			// Geometry shared across molecules
-			const coreGeo = new THREE.SphereGeometry(0.7, 28, 28);
-			const smallGeo = new THREE.SphereGeometry(0.45, 22, 22);
-			const bondGeo = new THREE.CylinderGeometry(0.12, 0.12, 1, 16);
+			const coreGeo = new THREE.SphereGeometry(0.55, 28, 28);
+			const smallGeo = new THREE.SphereGeometry(0.35, 22, 22);
+			const bondGeo = new THREE.CylinderGeometry(0.08, 0.08, 1, 12);
 
 			// CO2-style layout: 1 larger core, 2 smaller ends (linear or bent variant)
 			const core = new THREE.Mesh(coreGeo, coreMaterial);
@@ -84,8 +84,8 @@
 
 			const atoms: THREE.Mesh[] = [];
 			const variant = Math.random() > 0.5 ? 'linear' : 'bent';
-			const offset = 1.6 + Math.random() * 0.5;
-			const bend = THREE.MathUtils.degToRad(30 + Math.random() * 20);
+			const offset = 1.1 + Math.random() * 0.4;
+			const bend = THREE.MathUtils.degToRad(30 + Math.random() * 15);
 
 			const left = new THREE.Mesh(smallGeo, smallAtomMaterial);
 			const right = new THREE.Mesh(smallGeo, smallAtomMaterial);
@@ -94,7 +94,7 @@
 				left.position.set(-offset, 0, 0.1 * (Math.random() - 0.5));
 				right.position.set(offset, 0, -0.1 * (Math.random() - 0.5));
 			} else {
-				const dist = 1.2 + Math.random() * 0.4;
+				const dist = 0.9 + Math.random() * 0.4;
 				left.position.set(-Math.cos(bend) * dist, Math.sin(bend) * dist, 0.12);
 				right.position.set(Math.cos(bend) * dist, Math.sin(bend) * dist, -0.12);
 			}
@@ -113,7 +113,7 @@
 
 				const dir = new THREE.Vector3().subVectors(b.position, a.position);
 				const len = dir.length();
-				const visualLen = Math.max(len - 0.9, 0.35);
+				const visualLen = Math.max(len - 0.6, 0.3);
 				bond.scale.set(1, visualLen, 1);
 				bond.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
 			}
@@ -126,6 +126,9 @@
 				(Math.random() - 0.5) * 15,
 				(Math.random() - 0.5) * 10
 			);
+
+			// Make the whole molecule a bit smaller overall
+			group.scale.setScalar(0.8 + Math.random() * 0.1);
 
 			group.userData = {
 				rotSpeed: (Math.random() * 0.4 - 0.2) * 0.002,
