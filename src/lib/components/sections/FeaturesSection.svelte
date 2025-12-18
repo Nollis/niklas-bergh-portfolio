@@ -5,20 +5,20 @@
 		{
 			label: 'Hybrid Maker',
 			title: 'Technical Creator',
-			tagline: 'Bridging design, code, and AI for clarity.',
-			description: 'I blend hands-on illustration with engineering and AI tooling to turn complex ideas into intuitive visuals, apps, and systems.'
+			tagline: 'Visual clarity that speeds decisions.',
+			description: 'Bring complex ideas to life with illustration plus engineering so teams align faster.'
 		},
 		{
 			label: 'Systems Thinker',
 			title: 'Fullstack + Workflow Engineer',
-			tagline: 'Designing end-to-end systems that connect teams.',
-			description: 'From data models and real-time layers to production-ready UI, I build flows that hold up under real constraints.'
+			tagline: 'Systems users trust, end to end.',
+			description: 'Build scalable flows from data models and real-time layers to production-grade UX.'
 		},
 		{
 			label: 'Experiment-Forward',
 			title: 'Rapid Prototyper',
-			tagline: 'Test early and ship with confidence.',
-			description: 'New tech, 3D rigs, data pipelines, and UX patterns are prototyped fast, validated with metrics, and hardened for launch.'
+			tagline: 'Test early, ship with confidence.',
+			description: 'Deliver shippable prototypes that validate direction before big investments.'
 		}
 	];
 </script>

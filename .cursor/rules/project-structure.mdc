@@ -1,0 +1,128 @@
+---
+description: Project directory structure and important files for the Niklas Bergh Portfolio
+globs:
+alwaysApply: true
+---
+# Project Structure
+
+SvelteKit portfolio site with nature + AI hybrid aesthetic.
+
+## Tech Stack
+
+- **Framework**: SvelteKit 2 + TypeScript
+- **Styling**: Tailwind CSS 3
+- **UI**: Custom shadcn-style components (bits-ui)
+- **Icons**: Lucide Svelte
+- **Validation**: Zod
+- **3D/Effects**: Three.js
+
+## Directory Overview
+
+```
+PROJECT_ROOT/
+├── .cursor/rules/          # Cursor AI rules
+├── docs/                   # Architecture & documentation
+├── src/                    # Source code
+├── static/                 # Static assets (images)
+├── package.json            # Dependencies & scripts
+├── svelte.config.js        # SvelteKit configuration
+├── tailwind.config.ts      # Tailwind theme & colors
+├── tsconfig.json           # TypeScript configuration
+└── vite.config.ts          # Vite bundler configuration
+```
+
+## Source Structure (`src/`)
+
+```
+src/
+├── app.css                 # Global styles, CSS variables, Tailwind
+├── app.html                # HTML template
+├── app.d.ts                # TypeScript declarations
+├── lib/                    # Shared library code
+│   ├── components/         # All Svelte components
+│   ├── config/             # Theme & site configuration
+│   ├── content/            # Content data (projects)
+│   ├── index.ts            # Public exports
+│   └── utils.ts            # Utility functions (cn)
+└── routes/                 # SvelteKit pages
+```
+
+## Components (`src/lib/components/`)
+
+```
+components/
+├── effects/                # Background visual effects
+│   ├── BokehParticles.svelte    # Floating particle effect
+│   ├── CircuitBackground.svelte # Circuit board pattern
+│   ├── MoleculeBackground.svelte# Molecule visualization
+│   └── WavyLines.svelte         # Animated wave ribbons
+├── layout/                 # Site-wide layout
+│   ├── SiteHeader.svelte        # Navigation header
+│   └── SiteFooter.svelte        # Footer with links
+├── sections/               # Page sections
+│   ├── Hero.svelte              # Hero banner
+│   ├── FeaturesSection.svelte   # Feature highlights
+│   └── ProjectsSection.svelte   # Project showcase
+└── ui/                     # Reusable UI primitives
+    ├── Button.svelte            # Button variants
+    ├── FeatureCard.svelte       # Feature card
+    ├── GlassCard.svelte         # Glassmorphism card
+    ├── ProjectCard.svelte       # Project display card
+    └── Tag.svelte               # Tag/badge component
+```
+
+## Routes (`src/routes/`)
+
+```
+routes/
+├── +layout.svelte          # Root layout (header + footer)
+├── +page.svelte            # Home page (/)
+├── about/
+│   └── +page.svelte        # About page (/about)
+├── contact/
+│   ├── +page.svelte        # Contact form (/contact)
+│   └── +page.server.ts     # Form action handler
+└── projects/
+    ├── +page.svelte        # Projects list (/projects)
+    └── [slug]/
+        ├── +page.svelte    # Individual project (/projects/[slug])
+        └── +page.ts        # Project data loader
+```
+
+## Key Configuration Files
+
+| File | Purpose |
+|------|---------|
+| `src/lib/config/theme.ts` | Colors, gradients, navigation, social links |
+| `src/lib/content/projects.ts` | Project data model and entries |
+| `tailwind.config.ts` | Brand colors, custom utilities |
+| `src/app.css` | CSS variables, global styles |
+
+## Brand Colors
+
+| Name | Hex | Usage |
+|------|-----|-------|
+| Orange | `#EA7A43` | Primary CTA, buttons |
+| Teal | `#4DB0A2` | Secondary accent |
+| Dark | `#18282D` | Background |
+| Light Green | `#A6C8B5` | Text accent |
+| Cyan | `#25d0ab` | Highlights |
+| Green | `#98e594` | Success states |
+
+## Development Commands
+
+```bash
+npm run dev       # Start dev server
+npm run build     # Build for production
+npm run preview   # Preview production build
+npm run check     # TypeScript type checking
+```
+
+## Important Conventions
+
+1. **Components**: Place in appropriate subfolder under `src/lib/components/`
+2. **Pages**: Use SvelteKit file-based routing in `src/routes/`
+3. **Styling**: Use Tailwind classes; custom colors via `brand-*` prefix
+4. **Exports**: Re-export from `src/lib/index.ts` for `$lib` imports
+5. **Effects**: Background effects go in `components/effects/`
+6. **Content**: Data models in `src/lib/content/`

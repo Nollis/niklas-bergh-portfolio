@@ -1,0 +1,312 @@
+---
+description: Technology stack versions and best practices for the Niklas Bergh Portfolio
+globs:
+alwaysApply: true
+---
+# Technology Stack
+
+Complete stack reference with versions and best practices.
+
+## Core Framework
+
+### Svelte 5 (`^5.0.0`)
+
+**Major Change**: Svelte 5 introduces the **Runes API** — a new reactivity system replacing `$:` statements.
+
+**Runes Syntax**:
+
+- `$state()` — Declare reactive state
+- `$derived()` — Computed values (replaces `$:` for derivations)
+- `$effect()` — Side effects (replaces `$:` for effects)
+- `$props()` — Component props
+- `$bindable()` — Two-way bindable props
+
+**Best Practices**:
+
+```svelte
+<!-- ✅ Svelte 5 Runes Mode -->
+<script lang="ts">
+  let count = $state(0);
+  let doubled = $derived(count * 2);
+
+  $effect(() => {
+    console.log('Count changed:', count);
+  });
+</script>
+
+<!-- ❌ Legacy Mode (deprecated) -->
+<script>
+  let count = 0;
+  $: doubled = count * 2;
+</script>
+```
+
+**Key Changes**:
+
+- Components re-render when dynamic component references change
+- Attribute values must be quoted if concatenating: `class="{base} extra"`
+- `<svelte:component>` is no longer necessary in runes mode
+- Each block items cannot be directly reassigned; use index: `array[i] = value`
+
+---
+
+### SvelteKit 2 (`^2.0.0`)
+
+**Full-stack framework** with SSR, file-based routing, and form actions.
+
+**Project Structure**:
+
+| File | Purpose |
+|------|---------|
+| `+page.svelte` | Page component (UI) |
+| `+page.ts` | Universal load function (runs on server + client) |
+| `+page.server.ts` | Server-only load function + form actions |
+| `+layout.svelte` | Layout wrapper |
+| `+layout.ts` / `+layout.server.ts` | Layout data loading |
+
+**Best Practices**:
+
+```typescript
+// ✅ Use $app/state for reactive navigation state (SvelteKit 2)
+import { page } from '$app/state';
+
+// ✅ Server-only code in +page.server.ts
+export const actions = {
+  default: async ({ request }) => {
+    const data = await request.formData();
+    // Handle form...
+  }
+};
+
+// ✅ Type-safe load functions
+import type { PageLoad } from './$types';
+export const load: PageLoad = async ({ params }) => {
+  return { slug: params.slug };
+};
+```
+
+**Breaking Changes from v1**:
+
+- `form` and `data` removed from `use:enhance` callbacks → use `formElement` and `formData`
+- Paths now use relative imports by default
+
+---
+
+## Styling
+
+### Tailwind CSS 3.4 (`^3.4.15`)
+
+**Utility-first CSS framework**.
+
+**Best Practices**:
+
+```html
+<!-- ✅ Use utilities directly in markup -->
+<div class="flex items-center gap-4 rounded-lg bg-brand-dark p-4">
+
+<!-- ✅ Arbitrary values when needed -->
+<div class="top-[117px] bg-[#1a2b3c]">
+
+<!-- ❌ Avoid @apply abuse — use utilities directly -->
+```
+
+**Layer System**:
+
+| Layer | Purpose |
+|-------|---------|
+| `base` | Reset rules, default HTML element styles |
+| `components` | Class-based styles (overridable by utilities) |
+| `utilities` | Single-purpose classes (highest precedence) |
+
+**Configuration** (`tailwind.config.ts`):
+
+```typescript
+colors: {
+  brand: {
+    orange: '#EA7A43',    // Primary CTA
+    teal: '#4DB0A2',      // Secondary accent
+    dark: '#18282D',      // Background
+    'light-green': '#A6C8B5',
+    cyan: '#25d0ab',
+    green: '#98e594'
+  }
+}
+```
+
+**CSS Variables** — Defined in `src/app.css` and available as `var(--brand-*)`.
+
+---
+
+## UI Components
+
+### bits-ui 1.0 (`^1.0.0-next.0`)
+
+**Headless component library** for Svelte 5 — unstyled, accessible primitives.
+
+**Key Features**:
+
+- Compound component pattern (Root → Sub-components)
+- Full Svelte 5 runes support (`$state`, `$derived`, `$bindable`)
+- Snippet-based render delegation
+- Built-in accessibility (ARIA, keyboard navigation)
+
+**Usage Pattern**:
+
+```svelte
+<script lang="ts">
+  import { Dialog } from 'bits-ui';
+
+  let open = $state(false);
+</script>
+
+<Dialog.Root bind:open>
+  <Dialog.Trigger>Open</Dialog.Trigger>
+  <Dialog.Portal>
+    <Dialog.Overlay class="fixed inset-0 bg-black/50" />
+    <Dialog.Content class="fixed ...">
+      <Dialog.Title>Title</Dialog.Title>
+      <Dialog.Description>Description</Dialog.Description>
+    </Dialog.Content>
+  </Dialog.Portal>
+</Dialog.Root>
+```
+
+**Best Practices**:
+
+- Create reusable wrapper components for consistent styling
+- Use `name` attribute on form components (Select, Checkbox) for native form submission
+- Leverage snippets for dynamic content injection
+- Transitions: Use any animation library (not limited to Svelte transitions)
+
+---
+
+## Utilities
+
+### clsx (`^2.1.1`) + tailwind-merge (`^2.5.5`)
+
+Combine for conditional class merging without conflicts:
+
+```typescript
+// src/lib/utils.ts
+import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+```
+
+### tailwind-variants (`^0.3.0`)
+
+Type-safe variant API for component styling:
+
+```typescript
+import { tv } from 'tailwind-variants';
+
+const button = tv({
+  base: 'rounded-lg font-medium',
+  variants: {
+    color: {
+      primary: 'bg-brand-orange text-white',
+      secondary: 'bg-brand-teal text-white'
+    },
+    size: {
+      sm: 'px-3 py-1.5 text-sm',
+      md: 'px-4 py-2',
+      lg: 'px-6 py-3 text-lg'
+    }
+  },
+  defaultVariants: {
+    color: 'primary',
+    size: 'md'
+  }
+});
+```
+
+### Zod (`^3.24.1`)
+
+Schema validation for forms and data:
+
+```typescript
+import { z } from 'zod';
+
+const contactSchema = z.object({
+  name: z.string().min(2),
+  email: z.string().email(),
+  message: z.string().min(10)
+});
+
+// In +page.server.ts
+const result = contactSchema.safeParse(Object.fromEntries(formData));
+if (!result.success) {
+  return fail(400, { errors: result.error.flatten() });
+}
+```
+
+---
+
+## Icons & 3D
+
+### lucide-svelte (`^0.468.0`)
+
+Tree-shakable icon library:
+
+```svelte
+<script>
+  import { Mail, Github, ArrowRight } from 'lucide-svelte';
+</script>
+
+<Mail class="h-5 w-5" />
+```
+
+### Three.js (`^0.170.0`)
+
+3D graphics library for visual effects:
+
+```typescript
+import * as THREE from 'three';
+import type { Scene, Camera, Renderer } from 'three';
+```
+
+**Note**: Types available via `@types/three@^0.170.0`.
+
+---
+
+## Build Tools
+
+| Package | Version | Purpose |
+|---------|---------|---------|
+| Vite | `^6.0.0` | Build tool & dev server |
+| TypeScript | `^5.0.0` | Type checking |
+| PostCSS | `^8.4.49` | CSS processing |
+| Autoprefixer | `^10.4.20` | Vendor prefixes |
+
+---
+
+## Deployment
+
+### Adapter: Vercel (`@sveltejs/adapter-vercel@^5.10.3`)
+
+Configured for Vercel deployment with edge functions support.
+
+```javascript
+// svelte.config.js
+import adapter from '@sveltejs/adapter-vercel';
+```
+
+---
+
+## Version Compatibility Notes
+
+| Requirement | Status |
+|-------------|--------|
+| Node.js | 18+ recommended |
+| Svelte 5 + SvelteKit 2 | ✅ Compatible |
+| bits-ui 1.0 + Svelte 5 | ✅ Designed for Svelte 5 |
+| Tailwind 3.4 + Vite 6 | ✅ Compatible |
+
+**Upgrade Path**:
+
+- Svelte 5 runes mode is opt-in; legacy syntax still works but is deprecated
+- bits-ui 1.0 is a complete rewrite; migration guide available
+- Tailwind 4 (when released) will require config migration
